@@ -366,6 +366,7 @@ const joinSyllable = (
 const parseSyllable = (
   text: string,
   cursor: number,
+  normalize: boolean,
 ): Option.Option<{ syllable: string; nextCursor: number }> => {
   const choseongMatch = CHOSEONG.find((choseong) =>
     text.startsWith(choseong[0], cursor)
@@ -383,11 +384,15 @@ const parseSyllable = (
       );
       if (jongseongMatch) {
         return Option.some({
-          syllable: joinSyllable([
-            choseongMatch[1],
-            jungseongMatch[1],
-            jongseongMatch[1],
-          ], choseongMatch[2] && jungseongMatch[2] && jongseongMatch[2]),
+          syllable: joinSyllable(
+            [
+              choseongMatch[1],
+              jungseongMatch[1],
+              jongseongMatch[1],
+            ],
+            normalize && choseongMatch[2] && jungseongMatch[2] &&
+              jongseongMatch[2],
+          ),
           nextCursor: cursor + choseongMatch[0].length +
             jungseongMatch[0].length + jongseongMatch[0].length,
         });
@@ -395,7 +400,8 @@ const parseSyllable = (
       return Option.some({
         syllable: joinSyllable(
           [choseongMatch[1], jungseongMatch[1]],
-          (choseongMatch[1] === CHOSEONG_FILLER ? true : choseongMatch[2]) &&
+          normalize &&
+            (choseongMatch[1] === CHOSEONG_FILLER ? true : choseongMatch[2]) &&
             jungseongMatch[2],
         ),
         nextCursor: cursor + choseongMatch[0].length + jungseongMatch[0].length,
@@ -403,7 +409,10 @@ const parseSyllable = (
     }
     if (choseongMatch[1] !== CHOSEONG_FILLER) {
       return Option.some({
-        syllable: joinSyllable([choseongMatch[1]], choseongMatch[2]),
+        syllable: joinSyllable(
+          [choseongMatch[1]],
+          normalize && choseongMatch[2],
+        ),
         nextCursor: cursor + choseongMatch[0].length,
       });
     }
@@ -411,13 +420,13 @@ const parseSyllable = (
   return Option.none();
 };
 
-export const oldYaleToHangul = (text: string) => {
+export const oldYaleToHangul = (text: string, normalize: boolean) => {
   let prevEnd = 0;
   let current = 0;
   let hangul = "";
   while (current < text.length) {
     if (text.startsWith(SYLLABLE_SEPARATOR, current)) {
-      const lookahead = parseSyllable(text, current + 1);
+      const lookahead = parseSyllable(text, current + 1, normalize);
       if (Option.isSome(lookahead)) {
         hangul += text.slice(prevEnd, current);
         hangul += lookahead.value.syllable;
@@ -426,7 +435,7 @@ export const oldYaleToHangul = (text: string) => {
         current++;
       }
     } else {
-      const syllable = parseSyllable(text, current);
+      const syllable = parseSyllable(text, current, normalize);
       if (Option.isSome(syllable)) {
         hangul += text.slice(prevEnd, current);
         hangul += syllable.value.syllable;
@@ -442,12 +451,16 @@ export const oldYaleToHangul = (text: string) => {
 
 export const oldYaleToHangulHandler = (bot: Bot) => {
   bot.on("inline_query", async (ctx) => {
-    const converted = oldYaleToHangul(ctx.inlineQuery.query);
-    if (converted.trim().length === 0) return;
+    if (ctx.inlineQuery.query.trim().length === 0) return;
+    const decomposed = oldYaleToHangul(ctx.inlineQuery.query, false);
+    const composed = oldYaleToHangul(ctx.inlineQuery.query, true);
     await ctx.answerInlineQuery([
-      InlineQueryResultBuilder.article("result", "Send Converted Text", {
-        description: converted,
-      }).text(converted),
+      InlineQueryResultBuilder.article("result", "Decomposed Hangul", {
+        description: decomposed,
+      }).text(decomposed),
+      InlineQueryResultBuilder.article("result", "Composed Hangul", {
+        description: composed,
+      }).text(composed),
     ]);
   });
 };
