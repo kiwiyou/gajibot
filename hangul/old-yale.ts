@@ -443,12 +443,11 @@ export const oldYaleToHangul = (text: string) => {
 export const oldYaleToHangulHandler = (bot: Bot) => {
   bot.on("inline_query", async (ctx) => {
     const converted = oldYaleToHangul(ctx.inlineQuery.query);
+    if (converted.trim().length === 0) return;
     await ctx.answerInlineQuery([
-      InlineQueryResultBuilder.article("result", "Result", {
+      InlineQueryResultBuilder.article("result", "Send Converted Text", {
         description: converted,
-      }).text(converted, {
-        parse_mode: "MarkdownV2",
-      }),
+      }).text(converted),
     ]);
   });
 };
