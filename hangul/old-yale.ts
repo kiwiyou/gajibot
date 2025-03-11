@@ -1,6 +1,7 @@
 import { match, P } from "@gabriel/ts-pattern";
 import { Bot, InlineQueryResultBuilder } from "@grammy/core";
 import { Option } from "effect";
+import { idHash } from "../util/hash.ts";
 
 // [yale, hangul, is normalization meaningful]
 type LetterCorrespondence = [string, string, boolean];
@@ -455,12 +456,20 @@ export const oldYaleToHangulHandler = (bot: Bot) => {
     const decomposed = oldYaleToHangul(ctx.inlineQuery.query, false);
     const composed = oldYaleToHangul(ctx.inlineQuery.query, true);
     await ctx.answerInlineQuery([
-      InlineQueryResultBuilder.article("dh", "Decomposed Hangul", {
-        description: decomposed,
-      }).text(decomposed),
-      InlineQueryResultBuilder.article("ch", "Composed Hangul", {
-        description: composed,
-      }).text(composed),
+      InlineQueryResultBuilder.article(
+        await idHash(decomposed),
+        "Decomposed Hangul",
+        {
+          description: decomposed,
+        },
+      ).text(decomposed),
+      InlineQueryResultBuilder.article(
+        await idHash(composed),
+        "Composed Hangul",
+        {
+          description: composed,
+        },
+      ).text(composed),
     ]);
   });
 };

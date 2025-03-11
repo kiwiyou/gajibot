@@ -4,6 +4,8 @@
     "jsr:@gabriel/ts-pattern@^5.6.2": "5.6.2",
     "jsr:@std/assert@*": "1.0.11",
     "jsr:@std/assert@^1.0.11": "1.0.11",
+    "jsr:@std/encoding@*": "1.0.7",
+    "jsr:@std/encoding@^1.0.7": "1.0.7",
     "jsr:@std/internal@^1.0.5": "1.0.5",
     "npm:effect@^3.13.10": "3.13.10"
   },
@@ -16,6 +18,9 @@
       "dependencies": [
         "jsr:@std/internal"
       ]
+    },
+    "@std/encoding@1.0.7": {
+      "integrity": "f631247c1698fef289f2de9e2a33d571e46133b38d042905e3eac3715030a82d"
     },
     "@std/internal@1.0.5": {
       "integrity": "54a546004f769c1ac9e025abd15a76b6671ddc9687e2313b67376125650dc7ba"
@@ -92,6 +97,7 @@
     "dependencies": [
       "jsr:@gabriel/ts-pattern@^5.6.2",
       "jsr:@std/assert@^1.0.11",
+      "jsr:@std/encoding@^1.0.7",
       "npm:effect@^3.13.10"
     ]
   }

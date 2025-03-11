@@ -4,6 +4,7 @@
     "@grammy/types": "https://deno.land/x/grammy@v1.35.0/types.ts",
     "@grammy/core": "https://deno.land/x/grammy@v1.35.0/mod.ts",
     "@std/assert": "jsr:@std/assert@^1.0.11",
+    "@std/encoding": "jsr:@std/encoding@^1.0.7",
     "effect": "npm:effect@^3.13.10"
   }
 }
