@@ -444,7 +444,9 @@ export const oldYaleToHangulHandler = (bot: Bot) => {
   bot.on("inline_query", async (ctx) => {
     const converted = oldYaleToHangul(ctx.inlineQuery.query);
     await ctx.answerInlineQuery([
-      InlineQueryResultBuilder.article("result", "Result").text(converted, {
+      InlineQueryResultBuilder.article("result", "Result", {
+        description: converted,
+      }).text(converted, {
         parse_mode: "MarkdownV2",
       }),
     ]);
