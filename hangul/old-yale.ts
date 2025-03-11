@@ -463,17 +463,17 @@ export const oldYaleToHangulHandler = (bot: Bot) => {
     const composed = oldYaleToHangul(ctx.inlineQuery.query, true);
     await ctx.answerInlineQuery([
       InlineQueryResultBuilder.article(
-        await idHash(decomposed),
+        await idHash(`dh:${decomposed}`),
         "Decomposed Hangul",
         {
-          description: decomposed.slice(0, 20),
+          description: decomposed,
         },
       ).text(decomposed),
       InlineQueryResultBuilder.article(
-        await idHash(composed),
+        await idHash(`ch:${composed}`),
         "Composed Hangul",
         {
-          description: composed.slice(0, 20),
+          description: composed,
         },
       ).text(composed),
     ]);
