@@ -1,5 +1,6 @@
 import { match, P } from "@gabriel/ts-pattern";
 import { Bot, InlineQueryResultBuilder } from "@grammy/core";
+import { limit } from "@grammy/ratelimiter";
 import { Option } from "effect";
 import { idHash } from "../util/hash.ts";
 
@@ -451,6 +452,11 @@ export const oldYaleToHangul = (text: string, normalize: boolean) => {
 };
 
 export const oldYaleToHangulHandler = (bot: Bot) => {
+  bot.use(limit({
+    timeFrame: 1000,
+    limit: 2,
+    keyGenerator: (ctx) => ctx.inlineQuery?.from.id.toString(),
+  }));
   bot.on("inline_query", async (ctx) => {
     if (ctx.inlineQuery.query.trim().length === 0) return;
     const decomposed = oldYaleToHangul(ctx.inlineQuery.query, false);
@@ -460,14 +466,14 @@ export const oldYaleToHangulHandler = (bot: Bot) => {
         await idHash(decomposed),
         "Decomposed Hangul",
         {
-          description: decomposed,
+          description: decomposed.slice(0, 20),
         },
       ).text(decomposed),
       InlineQueryResultBuilder.article(
         await idHash(composed),
         "Composed Hangul",
         {
-          description: composed,
+          description: composed.slice(0, 20),
         },
       ).text(composed),
     ]);
