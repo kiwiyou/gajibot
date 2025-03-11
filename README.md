@@ -7,8 +7,8 @@
 
 Currently, GajiBot offers the following feature:
 
-- 📝 **Modified Yale to Old Hangul Conversion**: Transform Modified Yale
-  romanization into Old Hangul texts
+- 📝 [**Modified Yale to Old Hangul Conversion**](/hangul/old-yale.md):
+  Transform Modified Yale romanization into Old Hangul texts.
 
 ## 🚀 Deployment
 
