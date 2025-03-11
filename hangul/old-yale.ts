@@ -455,10 +455,10 @@ export const oldYaleToHangulHandler = (bot: Bot) => {
     const decomposed = oldYaleToHangul(ctx.inlineQuery.query, false);
     const composed = oldYaleToHangul(ctx.inlineQuery.query, true);
     await ctx.answerInlineQuery([
-      InlineQueryResultBuilder.article("result", "Decomposed Hangul", {
+      InlineQueryResultBuilder.article("dh", "Decomposed Hangul", {
         description: decomposed,
       }).text(decomposed),
-      InlineQueryResultBuilder.article("result", "Composed Hangul", {
+      InlineQueryResultBuilder.article("ch", "Composed Hangul", {
         description: composed,
       }).text(composed),
     ]);
