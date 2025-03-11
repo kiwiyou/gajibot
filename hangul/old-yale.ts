@@ -422,12 +422,23 @@ const parseSyllable = (
   return Option.none();
 };
 
+const HIGH_TONE = "\u302E";
+const RISING_TONE = "\u302F";
+
 export const oldYaleToHangul = (text: string, normalize: boolean) => {
   let prevEnd = 0;
   let current = 0;
   let hangul = "";
   while (current < text.length) {
-    if (text.startsWith(SYLLABLE_SEPARATOR, current)) {
+    if (text.startsWith("H", current)) {
+      hangul += text.slice(prevEnd, current);
+      hangul += HIGH_TONE;
+      prevEnd = current = current + 1;
+    } else if (text.startsWith("R", current)) {
+      hangul += text.slice(prevEnd, current);
+      hangul += RISING_TONE;
+      prevEnd = current = current + 1;
+    } else if (text.startsWith(SYLLABLE_SEPARATOR, current)) {
       const lookahead = parseSyllable(text, current + 1, normalize);
       if (Option.isSome(lookahead)) {
         hangul += text.slice(prevEnd, current);
