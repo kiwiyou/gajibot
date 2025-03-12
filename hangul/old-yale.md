@@ -13,8 +13,8 @@ This bot supports two types of output:
 - Input string is processed sequentially (greedy) from the beginning.
 - Syllables can be separated using period (`.`).
 - Tone marks:
-  - `H`: High tone (〮)
-  - `R`: Rising tone (〯)
+  - `;`: High tone (〮)
+  - `:`: Rising tone (〯)
 
 ## Letter Correspondence Table
 

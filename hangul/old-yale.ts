@@ -430,11 +430,11 @@ export const oldYaleToHangul = (text: string, normalize: boolean) => {
   let current = 0;
   let hangul = "";
   while (current < text.length) {
-    if (text.startsWith("H", current)) {
+    if (text.startsWith(";", current)) {
       hangul += text.slice(prevEnd, current);
       hangul += HIGH_TONE;
       prevEnd = current = current + 1;
-    } else if (text.startsWith("R", current)) {
+    } else if (text.startsWith(":", current)) {
       hangul += text.slice(prevEnd, current);
       hangul += RISING_TONE;
       prevEnd = current = current + 1;
